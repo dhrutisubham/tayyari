@@ -20,6 +20,7 @@
   
 
 }
+
 body{
   @apply p-4 md:p-8 lg:p-10 h-dvh;
 }

@@ -3,6 +3,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import CloseIcon from '@mui/icons-material/Close';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 
@@ -14,7 +15,15 @@ const Question = ({ questions }) => {
   const [userChoices, setUserChoices] = useState(Array(questions.length).fill(null));
   const [showSolution, setShowSolution] = useState(false);
 
-  const { id, type, text, image, options, correct_answer } = questions[currentQuestionIndex];
+  const { id, type, text, image, options, correct_answer, common_image } = questions[currentQuestionIndex];
+
+  let correctedAnswerArray=[];
+  if (typeof correct_answer === 'object' && correct_answer !== null) {
+     correctedAnswerArray = Object.entries(correct_answer).map(([key, value]) => ({ key, value }));
+   } 
+   else{
+     correctedAnswerArray= correct_answer;
+   }
 
   const handleNextClick = () => {
     setCurrentQuestionIndex(prevIndex => prevIndex < questions.length - 1 ? prevIndex + 1 : prevIndex);
@@ -45,8 +54,17 @@ const Question = ({ questions }) => {
     // Display correct answer and solution for the current question
   };
 
+  const handleCloseSolution = () => {
+    setShowSolution(false);
+    // Display correct answer and solution for the current question
+  };
+
+  
+
   return (
-    <>
+    <div className='md:flex gap-2 h-full'>
+
+    {/* Question Section  */}
     <section className="w-full h-full flex flex-col gap-2 md:gap-6 shadow-md bg-white rounded-lg overflow-auto"> 
       {/* Header */}
       <div className='sticky customPadding top-0 flex justify-between gap-4 items-center md:justify-start md:py-4 bg-white shadow-sm z-10'>
@@ -103,7 +121,35 @@ const Question = ({ questions }) => {
         </button>
       </div>
     </section>
-    </>
+
+    {/* Answer Section  */}
+    {showSolution && (
+      <>
+      {/* Dark  Overlay  */}
+      <div className="fixed top-0 bottom-0 left-0 right-0 md:hidden bg-black opacity-50 z-20"></div>
+      <section className="h-full w-2/3 md:w-1/2 bg-white rounded-lg shadow-md p-4 absolute right-0 top-0 z-20 md:static">
+        <div className='flex justify-between'>
+        <h2 className='font-semibold text-lg'>Answer</h2>
+        <button onClick={handleCloseSolution}><CloseIcon></CloseIcon></button>
+        </div>
+        <section className="flex flex-col gap-2">
+          {
+          
+          
+          correctedAnswerArray.map((answer, index) => (
+            <div key={index} className="p-2 bg-blue-200">
+              {/* <Latex>{answer.text}</Latex> */}
+              {console.log(answer)}
+            </div>
+          ))}
+          {common_image && (
+            <img src={common_image} alt="Common Answer Image" />
+          )}
+        </section>
+      </section>
+      </>
+    )}
+    </div>
   );
 }
 
