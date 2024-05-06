@@ -1,25 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React, { useState, useEffect } from 'react';
 import './App.css'
 import Question from './components/question/Question'
 
-var text=`$$(3\\times 4) \\div (5-3)$$`;
-let optionshaha=[
-  {
-    text: "Option 1",
-    image: "/vite.svg"
-  },
-  {
-    text: "Option 2",
-    image: "/another-image.svg"
-  },
-  // Add more options as needed
-]
+
+
+
 function App() {
+  const [questionsSet, setQuestions] = useState([]);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const response = await fetch(`https://run.mocky.io/v3/92ccab19-d24c-48f0-a0ea-b78a1f3728eb`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        setQuestions(data.questions);
+        console.log(questionsSet);
+        // console.log(response);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchQuestions();
+  }, []);
+
+
   return (
     <>
-      <Question title={"Question 1"} body={text} image={`/vite.svg`} options={optionshaha}></Question> 
+      {questionsSet.length!=0 && (
+      <Question questions={questionsSet}></Question> )}
     </>
   )
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -7,57 +7,113 @@ import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 
 
-const Question = ({title, body, image, options}) => {
-  return (
-    <form className="w-full h-full flex flex-col gap-2 md:gap-6 pb-0 p-5 md:pt-6 md:px-8 lg:pt-8 lg:px-10 shadow-lg bg-white rounded-lg overflow-auto"> 
-      <div className='flex justify-between gap-4 items-center md:justify-start'>
-        <button className="rounded p-2 md:hidden bg-gray-200">
-          <ArrowBackIosNewIcon></ArrowBackIosNewIcon>
-        </button>
-        <h1 className='font-medium md:font-bold text-lg text-gray-700 md:text-gray-900'>{title}</h1>
-        <button className="rounded p-2 md:hidden bg-gray-200">
-          <ArrowForwardIosIcon></ArrowForwardIosIcon>
-        </button>
-      </div>
-      <div className="flex flex-col gap-4 justify-center items-center">
-      <p className='text-gray-900 w-full text-justify'>
-        <Latex displayMode={true}>{body}</Latex>
-      </p>
-      {
-        (image!=null) && (
-          <img src={image} alt="Question Image" className="w-3/4" />
-        )
-      }
-      </div>
-      <div className="grow"></div>
-      <div className="sticky order-11 bg-white bottom-0 border-t-2 border-gray-200 py-4 pb-6 flex justify-center md:justify-between w-full">
-        <button className="hidden md:block border-gray-400 text-gray-500 pr-4 pl-2 py-2 rounded-md border-2 flex gap-2">
-        <ArrowBackIcon></ArrowBackIcon>
-          Previous
-          
-          </button>
-        <div className="flex gap-2">
-        <button className="border-gray-400 text-gray-500 px-4 py-2 rounded-md border-2 ">Check Solution</button>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-md ">Submit Answer</button>
 
-        </div>
-        <button className="hidden md:block border-gray-400 text-gray-500 pl-4 pr-2 py-2 rounded-md border-2 flex gap-2">
-          Next
-          <ArrowForwardIcon></ArrowForwardIcon>
-          </button>
+const Question = ({ questions }) => {
+  console.log(questions);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [userChoices, setUserChoices] = useState(Array(questions.length).fill(null));
+  const [showSolution, setShowSolution] = useState(false);
+
+  const { id, type, text, image, options, correct_answer } = questions[currentQuestionIndex];
+
+  console.log(questions[currentQuestionIndex]);
+
+  // console.log(id);
+  // console.log(type);
+  // console.log(body);
+  // console.log(qImage);
+  // console.log(options);
+  // console.log(correctAnswer);
+  
+
+
+  const handleNextClick = () => {
+    setCurrentQuestionIndex(prevIndex => prevIndex < questions.length - 1 ? prevIndex + 1 : prevIndex);
+    setShowSolution(false);
+  };
+
+  const handlePreviousClick = () => {
+    setCurrentQuestionIndex(prevIndex => prevIndex > 0 ? prevIndex - 1 : prevIndex);
+    setShowSolution(false);
+  };
+
+  const handleOptionChange = (optionIndex) => {
+    setUserChoices(prevChoices => {
+      const updatedChoices = [...prevChoices];
+      updatedChoices[currentQuestionIndex] = optionIndex;
+      return updatedChoices;
+    });
+  };
+
+  const handleSubmitAnswer = () => {
+    setShowSolution(true);
+    // Compare user's choice with correct answer and display result
+    // You can implement this logic based on your requirement
+  };
+
+  const handleShowSolution = () => {
+    setShowSolution(true);
+    // Display correct answer and solution for the current question
+  };
+
+  return (
+    <>
+    <section className="w-full h-full flex flex-col gap-2 md:gap-6 shadow-md bg-white rounded-lg overflow-auto"> 
+      {/* Header */}
+      <div className='sticky customPadding top-0 flex justify-between gap-4 items-center md:justify-start md:py-4 bg-white shadow-sm'>
+        <button className="rounded-lg p-2 md:hidden bg-gray-100" onClick={handlePreviousClick}>
+          <ArrowBackIosNewIcon />
+        </button>
+        <h1 className='font-medium md:font-bold text-lg text-gray-700 md:text-gray-900'>Question {id}</h1>
+        <button className="rounded-lg p-2 md:hidden bg-gray-100" onClick={handleNextClick}>
+          <ArrowForwardIosIcon />
+        </button>
       </div>
-      <ul className="flex flex-col md:flex-row flex-wrap w-full">
-  {options.map((option, index) => (
-    <li key={index} className="w-full shadow-md">
-      <input type='radio' className='flex flex-col gap-2' />
-      {/* Conditionally render text and image options */}
-      {option.text && <span>{option.text}</span>}
-      {option.image && <img src={option.image} alt={`Answer Option ${index}`} />}
-    </li>
-  ))}
-</ul>
-    </form>
-  )
+      {/* Question Body */}
+      <div className="flex flex-col customPadding gap-4 justify-center items-center">
+        <p className='text-gray-900 w-full text-justify'>
+          <Latex displayMode={true}>{text}</Latex>
+        </p>
+        {image && <img src={image} alt="Question Image" className="w-3/4" />}
+      </div>
+      {/* Options */}
+      <ul className="flex flex-col customPadding md:flex-row flex-wrap w-full gap-2">
+        {options.map((option, index) => (
+          <li key={index} className={`w-full ${(option.image != null) ? "md:w-5/6" : "md:max-w-[80%] md:w-fit"} md:pr-6 border border-gray-200 flex gap-3 p-2 md:p-4 rounded-lg pt-1`}>
+            <input type='radio' id={`Option ${index + 1}`} className='hidden' checked={userChoices[currentQuestionIndex] === index} onChange={() => handleOptionChange(index)} />
+            {/* Conditionally render text and image options */}
+            {(option.text || option.image) && (
+              <label htmlFor={`Option ${index + 1}`} className="answers flex flex-col gap-2 w-full pr-8 pb-2 pl-10">
+                {option.text && <span>{option.text}</span>}
+                {option.image && <img className='w-full' src={option.image} alt={`Answer Option ${index + 1}`} />}
+              </label>
+            )}
+          </li>
+        ))}
+      </ul>
+      {/* Footer */}
+      <div className="grow"></div>
+      <div className="sticky order-11 customPadding bg-white bottom-0 border-t-2 border-gray-200 py-4 pb-6 flex justify-center md:justify-between w-full">
+        <button className="hidden md:flex border-gray-400 text-gray-500 pr-4 pl-2 py-2 rounded-md border-2  gap-2" onClick={handlePreviousClick}>
+          <ArrowBackIcon />
+          Previous
+        </button>
+        <div className="flex gap-2">
+          <button className="border-gray-400 text-gray-500 px-4 py-2 rounded-md border-2" onClick={handleShowSolution}>
+            Check Solution
+          </button>
+          <button className="bg-blue-600 text-white px-4 py-2 rounded-md" onClick={handleSubmitAnswer}>
+            Submit Answer
+          </button>
+        </div>
+        <button className="hidden md:flex border-gray-400 text-gray-500 pl-4 pr-2 py-2 rounded-md border-2 gap-2" onClick={handleNextClick}>
+          Next
+          <ArrowForwardIcon />
+        </button>
+      </div>
+    </section>
+    </>
+  );
 }
 
-export default Question
+export default Question;
