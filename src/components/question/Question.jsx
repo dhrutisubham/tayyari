@@ -15,7 +15,7 @@ const Question = ({ questions }) => {
   const [userChoices, setUserChoices] = useState(Array(questions.length).fill(null));
   const [showSolution, setShowSolution] = useState(false);
 
-  const { id, type, text, image, options, correct_answer, common_image } = questions[currentQuestionIndex];
+  const { id, type, text, image, options, correct_answer, correct_answers, common_image } = questions[currentQuestionIndex];
 
   let correctedAnswerArray=[];
   if (typeof correct_answer === 'object' && correct_answer !== null) {
@@ -128,23 +128,29 @@ const Question = ({ questions }) => {
       {/* Dark  Overlay  */}
       <div className="fixed top-0 bottom-0 left-0 right-0 md:hidden bg-black opacity-50 z-20"></div>
       <section className="h-full w-2/3 md:w-1/2 bg-white rounded-lg shadow-md p-4 absolute right-0 top-0 z-20 md:static">
-        <div className='flex justify-between'>
-        <h2 className='font-semibold text-lg'>Answer</h2>
+        <div className='flex justify-between items-center mb-3'>
+        <h2 className='font-semibold text-lg '>Answer</h2>
         <button onClick={handleCloseSolution}><CloseIcon></CloseIcon></button>
         </div>
         <section className="flex flex-col gap-2">
           {
-          
-          
-          correctedAnswerArray.map((answer, index) => (
-            <div key={index} className="p-2 bg-blue-200">
-              {/* <Latex>{answer.text}</Latex> */}
-              {console.log(answer)}
+            correct_answer && (
+              <div className="p-2 bg-blue-100 rounded-md">
+              <Latex>{correct_answer.text}</Latex>
             </div>
-          ))}
+            )}
+          {
+          correct_answers && (
+          correct_answers.map((answer, index) => (
+            <div key={index} className="p-2 bg-blue-100 rounded-md">
+              <Latex>{answer.text}</Latex>
+            </div>
+          )))}
+
           {common_image && (
             <img src={common_image} alt="Common Answer Image" />
           )}
+
         </section>
       </section>
       </>
