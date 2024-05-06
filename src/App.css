@@ -3,5 +3,14 @@
 
 label.answers::before{
     content: '';
-    @apply relative top-7 -left-8 w-5 aspect-square rounded-full border-blue-600 border-2;
+    @apply relative -left-2 w-5 h-5 aspect-square rounded-full border-blue-600 border-2;
+}
+
+input[type="radio"]:checked + label:before{
+    content: '';
+    @apply relative -left-2 w-5 h-5 aspect-square rounded-full outline-blue-600 border-[6px];
+}
+
+li:has(input[type="radio"]:checked){
+    @apply bg-gray-100;
 }

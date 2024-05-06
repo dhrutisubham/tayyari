@@ -9,23 +9,12 @@ import Latex from 'react-latex-next';
 
 
 const Question = ({ questions }) => {
-  console.log(questions);
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userChoices, setUserChoices] = useState(Array(questions.length).fill(null));
   const [showSolution, setShowSolution] = useState(false);
 
   const { id, type, text, image, options, correct_answer } = questions[currentQuestionIndex];
-
-  console.log(questions[currentQuestionIndex]);
-
-  // console.log(id);
-  // console.log(type);
-  // console.log(body);
-  // console.log(qImage);
-  // console.log(options);
-  // console.log(correctAnswer);
-  
-
 
   const handleNextClick = () => {
     setCurrentQuestionIndex(prevIndex => prevIndex < questions.length - 1 ? prevIndex + 1 : prevIndex);
@@ -60,7 +49,7 @@ const Question = ({ questions }) => {
     <>
     <section className="w-full h-full flex flex-col gap-2 md:gap-6 shadow-md bg-white rounded-lg overflow-auto"> 
       {/* Header */}
-      <div className='sticky customPadding top-0 flex justify-between gap-4 items-center md:justify-start md:py-4 bg-white shadow-sm'>
+      <div className='sticky customPadding top-0 flex justify-between gap-4 items-center md:justify-start md:py-4 bg-white shadow-sm z-10'>
         <button className="rounded-lg p-2 md:hidden bg-gray-100" onClick={handlePreviousClick}>
           <ArrowBackIosNewIcon />
         </button>
@@ -83,9 +72,11 @@ const Question = ({ questions }) => {
             <input type='radio' id={`Option ${index + 1}`} className='hidden' checked={userChoices[currentQuestionIndex] === index} onChange={() => handleOptionChange(index)} />
             {/* Conditionally render text and image options */}
             {(option.text || option.image) && (
-              <label htmlFor={`Option ${index + 1}`} className="answers flex flex-col gap-2 w-full pr-8 pb-2 pl-10">
-                {option.text && <span>{option.text}</span>}
+              <label htmlFor={`Option ${index + 1}`} className="answers inline-flex gap-2 w-full pr-8 pb-1 pl-4">
+                <div className='flex flex-col gap-4'>
+                {option.text && <Latex displayMode={true}>{option.text}</Latex>}
                 {option.image && <img className='w-full' src={option.image} alt={`Answer Option ${index + 1}`} />}
+                </div>
               </label>
             )}
           </li>
