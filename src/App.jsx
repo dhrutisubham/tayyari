@@ -11,7 +11,7 @@ function App() {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await fetch(`https://run.mocky.io/v3/92ccab19-d24c-48f0-a0ea-b78a1f3728eb`);
+        const response = await fetch(`https://run.mocky.io/v3/a7ab9a0e-9ae4-4a36-a1fb-fba4a3c0766e`);
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
