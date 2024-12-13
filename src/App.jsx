@@ -1,24 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import './App.css'
-import Question from './components/question/Question'
-
-
+import Question from './components/question/question'
 
 
 function App() {
-  const [questionsSet, setQuestions] = useState([]);
+  const [questionsSet, setQuestions] = useState(null);
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await fetch(`https://run.mocky.io/v3/a7ab9a0e-9ae4-4a36-a1fb-fba4a3c0766e`);
+        const response = await fetch(`/a7ab9a0e-9ae4-4a36-a1fb-fba4a3c0766e.json`);
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
         const data = await response.json();
         setQuestions(data.questions);
         console.log(questionsSet);
-        // console.log(response);
+
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -27,10 +25,9 @@ function App() {
     fetchQuestions();
   }, []);
 
-
   return (
     <>
-      {questionsSet.length!=0 && (
+      {questionsSet && (
       <Question questions={questionsSet}></Question> )}
     </>
   )

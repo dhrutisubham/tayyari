@@ -15,7 +15,7 @@ const Question = ({ questions }) => {
   const [userChoices, setUserChoices] = useState(Array(questions.length).fill(null));
   const [showSolution, setShowSolution] = useState(false);
 
-  const { id, type, text, image, options, correct_answer, correct_answers, common_image } = questions[currentQuestionIndex];
+  const { id, type, question, image, options, correct_answer, correct_answers, common_image } = questions[currentQuestionIndex];
 
   let correctedAnswerArray=[];
   if (typeof correct_answer === 'object' && correct_answer !== null) {
@@ -79,14 +79,14 @@ const Question = ({ questions }) => {
       {/* Question Body */}
       <div className="flex flex-col customPadding gap-4 justify-center items-center">
         <p className='text-gray-900 w-full text-justify'>
-          <Latex displayMode={true}>{text}</Latex>
+          <Latex displayMode={true}>{question}</Latex>
         </p>
         {image && <img src={image} alt="Question Image" className="w-3/4" />}
       </div>
       {/* Options */}
       <ul className="flex flex-col customPadding md:flex-row flex-wrap w-full gap-2">
         {options.map((option, index) => (
-          <li key={index} className={`w-full ${(option.image != null) ? "md:w-5/6" : "md:max-w-[80%] md:w-fit"} md:pr-6 border border-gray-200 flex gap-3 p-2 md:p-4 rounded-lg pt-1`}>
+          <li key={index} className={`w-full ${(option.image != null) ? "md:w-5/6" : "md:max-w-[80%] md:w-fit"} md:pr-6 border border-gray-200 flex gap-3 p-2 md:p-4 rounded-lg pt-2`}>
             <input type='radio' id={`Option ${index + 1}`} className='hidden' checked={userChoices[currentQuestionIndex] === index} onChange={() => handleOptionChange(index)} />
             {/* Conditionally render text and image options */}
             {(option.text || option.image) && (

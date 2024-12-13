@@ -1,0 +1,64 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "type": "single",
+      "question": "$$(3\\times 4) \\div (5-3)$$",
+      "options": [
+        {
+          "text": "6"
+        },
+        {
+          "text": "8"
+        },
+        {
+          "text": "10"
+        },
+        {
+          "text": "12"
+        }
+      ],
+      "correctAnswer": ["Option 3"]
+    },
+    {
+      "id": 2,
+      "type": "multiple",
+      "question": "$$(5^2 - 3^2)$$",
+      "options": [
+        {
+          "text": "22"
+        },
+        {
+          "text": "20"
+        },
+        {
+          "text": "16"
+        },
+        {
+          "text": "12"
+        }
+      ],
+      "correctAnswers": ["Option 2", "Option 3"]
+    },
+    {
+      "id": 3,
+      "type": "single",
+      "question": "$$(7 \\times 9) + 4$$",
+      "options": [
+        {
+          "text": "69"
+        },
+        {
+          "text": "67"
+        },
+        {
+          "text": "63"
+        },
+        {
+          "text": "61"
+        }
+      ],
+      "correctAnswer": ["Option 3"]
+    }
+]
+}
