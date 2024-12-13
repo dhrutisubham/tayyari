@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css'
-import Question from './components/question/question'
+import Question from './components/question/question.jsx'
 
 
 function App() {
